@@ -40,22 +40,22 @@ body {
 }
 
 /* ===================
-  ALL: Orange Theme
+  ALL: Theme
    =================== */
 
 .header-container {
-  border-bottom: 20px solid #e44d26;
+  border-bottom: 20px solid #101245;
 }
 
 .footer-container,
 .main > aside {
-  border-top: 20px solid #e44d26;
+  border-top: 20px solid #101245;
 }
 
 .header-container,
 .footer-container,
 .main > aside {
-  background: #f16529;
+  background: #101245;
 }
 
 header h1 {
@@ -96,12 +96,12 @@ header h1 {
    ========================================================================== */
 
 h1 {
-  color: #e44d26;
+  color: #101245;
 }
 
 h2 {
-  color: #f16529;
-  border-top: 1px solid #f16529;
+  color: #101245;
+  border-top: 1px solid #101245;
   margin-bottom: 0;
   padding: 0.5em 0;
 }
@@ -175,14 +175,14 @@ aside button {
   text-transform: uppercase;
   cursor: pointer;
   border-radius: 8px;
-  background-color: #e44d26;
-  color: #ffc;
-  border: 2px solid #f08875;
-  border-color: #f08875 #7f2b22 #7f2b22 #f08875
+  background-color: #101245;
+  color: #fff;
+  border: 2px solid #1d1f6b;
+  border-color: #1d1f6b #050624 #050624 #1d1f6b;
 }
 
 aside button:focus {
-  background-color: #dd2d18;
+  background-color: #080830;
 }
 
 textarea#datamgmt {
