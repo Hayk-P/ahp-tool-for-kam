@@ -51,6 +51,21 @@ let valueHasForwardSlash = function(value) {
   return value.indexOf('/') !== -1;
 }
 
+let isValidAHPValue = function(value) {
+  // Allow empty value for clearing
+  if (!value) return true;
+  
+  // Check if it's a fraction (e.g. 1/3)
+  if (valueHasForwardSlash(value)) {
+    let parts = value.split('/');
+    // Numerator must be 1, denominator must be 1-9
+    return parts[0] === '1' && /^[1-9]$/.test(parts[1]);
+  }
+  
+  // Direct values must be 1-9
+  return /^[1-9]$/.test(value);
+}
+
 let clearPairwiseStyleClasses = function(input) {
   // remove all winner, loser & equal_weight classes
   document.querySelectorAll('.winner').forEach(function(node) {
@@ -193,7 +208,14 @@ let handlePair = function(event) {
     setTimeout(function() {
       let relatedInput = document.getElementById(getRelatedInputId(activeInput.id));
       let activeValue = activeInput.value;
-      //let relatedValue = relatedInput.value;
+
+      // Validate input
+      if (!isValidAHPValue(activeValue)) {
+        activeInput.value = ''; // Clear invalid input
+        relatedInput.value = ''; // Clear related input
+        alert('Please enter a value between 1 and 9, or a fraction like 1/2 through 1/9');
+        return;
+      }
 
       clearPairwiseStyleClasses();
 
