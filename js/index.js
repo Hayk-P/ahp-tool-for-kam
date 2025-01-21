@@ -184,18 +184,22 @@ let updateDescriptiveSentence = function(input, clear) {
   let row = getPairwiseInputRow(input.id);
   let col = getPairwiseInputColumn(input.id);
 
+  let scaleDescription = '(1=Equally, 2=Equally to moderately, 3=Moderately, 4=Moderately to strongly, ' +
+                        '5=Strongly, 6=Strongly to very strongly, 7=Very strongly, 8=Very strongly to extremely, ' +
+                        '9=Extremely preferred)';
+
   if (inputIsCriteria(input)) {
     let A = document.getElementById('criteria'+row).value;
     let B = document.getElementById('criteria'+col).value;
     let sentence = document.getElementById('pairwise_criteria_sentence');
-    sentence.innerHTML = clear ? '' : 'Rate '+A+'\'s importance over '+B+' <small>(1=equal, 3=moderate, 5=strong, 9=extreme)</small>'
+    sentence.innerHTML = clear ? '' : 'Rate '+A+'\'s preference over '+B+' <small>' + scaleDescription + '</small>'
   } else {
     let item = getItemSectionNumber(input.id);
     let A = document.getElementById('item'+row).value;
     let B = document.getElementById('item'+col).value;
     let I = document.getElementById('criteria'+item).value;
     let sentence = document.getElementById('criteria'+item+'_sentence');
-    sentence.innerHTML = clear ? '' : 'For '+I+' rate '+A+'\'s importance over '+B+' <small>(1=equal, 3=moderate, 5=strong, 9=extreme)</small>'
+    sentence.innerHTML = clear ? '' : 'For '+I+' rate '+A+'\'s preference over '+B+' <small>' + scaleDescription + '</small>'
   }
 }
 
@@ -209,11 +213,20 @@ let handlePair = function(event) {
       let relatedInput = document.getElementById(getRelatedInputId(activeInput.id));
       let activeValue = activeInput.value;
 
-      // Validate input
+      // Validate input with updated message
       if (!isValidAHPValue(activeValue)) {
         activeInput.value = ''; // Clear invalid input
         relatedInput.value = ''; // Clear related input
-        alert('Please enter a value between 1 and 9, or a fraction like 1/2 through 1/9');
+        alert('Please enter a value between 1 and 9:\n\n' +
+              '1 - Equally preferred\n' +
+              '2 - Equally to moderately preferred\n' +
+              '3 - Moderately preferred\n' +
+              '4 - Moderately to strongly preferred\n' +
+              '5 - Strongly preferred\n' +
+              '6 - Strongly to very strongly preferred\n' +
+              '7 - Very strongly preferred\n' +
+              '8 - Very strongly to extremely preferred\n' +
+              '9 - Extremely preferred');
         return;
       }
 
