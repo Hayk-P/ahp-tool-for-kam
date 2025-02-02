@@ -1,3 +1,4 @@
+console.log("Updated modules.js loaded");
 import chartist from 'chartist'
 import AHP from 'ahp'
 import zipWith from 'lodash-es/zipWith'
