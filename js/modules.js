@@ -69,6 +69,9 @@ const inputsToAhpResults = function(myItems, myCriteria, myCriteriaItemRank, myC
 
   // Compute the consistency ratio for the criteria pairwise matrix.
   const crCriteria = computeConsistencyRatio(myCriteriaRank, criteriaWeights);
+  console.log('myCriteriaRank:', myCriteriaRank);
+  console.log('criteriaWeights:', criteriaWeights);
+  console.log('Computed CR for criteria:', crCriteria);
 
   return {
     criteria: {
