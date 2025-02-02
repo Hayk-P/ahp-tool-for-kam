@@ -478,7 +478,9 @@ let runAHP = function(event) {
 
   applyTotalCriteriaClassName();
 
+  // Run the AHP calculation:
   let decision = window.runCalculation(items, criteria, criteriaItemRank, criteriaRank);
+  console.log('Decision object:', decision);
 
   new window.chartist.Bar('#criteria', {
     labels: decision.criteria.labels,
