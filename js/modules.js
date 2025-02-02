@@ -22,7 +22,7 @@ function computeConsistencyRatio(matrix, weights) {
   const lambdaMax = lambdaSum / n;
   const CI = (lambdaMax - n) / (n - 1);
   
-  // RI values for matrices of order 1..10 (example values)
+  // RI values for matrices of order 1..10 (common AHP RI values)
   const RIValues = [0, 0, 0.58, 0.90, 1.12, 1.24, 1.32, 1.41, 1.45, 1.49];
   const RI = RIValues[n] || 1.49;
   
@@ -47,7 +47,7 @@ const inputsToAhpResults = function(myItems, myCriteria, myCriteriaItemRank, myC
   const alternatives = Object.keys(output.rankedScoreMap);
   const alternativesTotalScores = output.rankedScores;
 
-  // Score of each alternative ranking with respect to each criteria multiplied by the criteria's weight.
+  // Score of each alternative ranking with respect to each criterion multiplied by the criterion's weight.
   // When you add up these totals for each alternative, you end up with the same value as the alternative's total score.
   const alternativesPriorityMatrix = [];
   output.rankingMatrix.forEach((alternativeScores, alternativeIndex) => {
@@ -55,20 +55,19 @@ const inputsToAhpResults = function(myItems, myCriteria, myCriteriaItemRank, myC
     alternativeScores.forEach((alternativeCriteriaScore, criteriaIndex) => {
       scoresMultipliedByCriteriaWeight[criteriaIndex] = alternativeCriteriaScore * criteriaWeights[criteriaIndex];
     });
-    // Reverse to match display order
+    // Reverse order for display
     alternativesPriorityMatrix[alternativeIndex] = scoresMultipliedByCriteriaWeight.reverse();
   });
 
-  const criteriasWithScores = zipWith(criteria, criteriaWeights, (criteria, score) => {
-    return `${criteria}: ${Number.parseFloat(score).toFixed(3)}`;
+  const criteriasWithScores = zipWith(criteria, criteriaWeights, (crit, score) => {
+    return `${crit}: ${Number.parseFloat(score).toFixed(3)}`;
   });
 
-  const alternativesWithScores = zipWith(alternatives, alternativesTotalScores, (alternative, score) => {
-    return `${alternative}: ${Number.parseFloat(score).toFixed(3)}`;
+  const alternativesWithScores = zipWith(alternatives, alternativesTotalScores, (alt, score) => {
+    return `${alt}: ${Number.parseFloat(score).toFixed(3)}`;
   });
 
-  // Compute the Consistency Ratio for the criteria matrix using the provided pairwise criteria matrix (myCriteriaRank)
-  // and the computed priority vector (criteriaWeights).
+  // Compute the consistency ratio for the criteria pairwise matrix.
   const crCriteria = computeConsistencyRatio(myCriteriaRank, criteriaWeights);
 
   return {
@@ -82,7 +81,7 @@ const inputsToAhpResults = function(myItems, myCriteria, myCriteriaItemRank, myC
     },
     consistency: {
       criteria: crCriteria
-      // You can add alternatives: crAlternatives if needed in the future.
+      // (You can later add alternatives: crAlternatives if needed.)
     }
   }
 }
