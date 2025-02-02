@@ -506,7 +506,7 @@ let runAHP = function(event) {
     }
   });
 
-  // === Update the Consistency Ratio (CR) display ===
+    // === Update the Consistency Ratio (CR) display ===
   if(decision.consistency && typeof decision.consistency.criteria !== 'undefined') {
     const criteriaCRElem = document.getElementById('criteriaCR');
     const crValue = decision.consistency.criteria;
@@ -522,16 +522,15 @@ let runAHP = function(event) {
   }
   // === End CR update ===
 
+  // TEMPORARY: Force update the CR placeholder with a test value.
+  const testCRElem = document.getElementById('criteriaCR');
+  if (testCRElem) {
+    testCRElem.textContent = "Test CR: 0.123";
+    testCRElem.style.backgroundColor = 'lightgreen';
+    console.log("Forced test CR update in index.js");
+  } else {
+    console.log("Element with id 'criteriaCR' not found!");
+  }
+
   event.preventDefault();
-
   return false;
-};
-
-document.getElementById('calcbtn').addEventListener('click', runAHP);
-document.getElementById('calcbtn').addEventListener('keypress', runAHP);
-
-// Auto-loading prior state during page load triggers calls to handlePair()
-// which uses setTimeout() to asynchronously configure the cells. The function
-// clearPairwiseStyleClasses() needs to happen after all that activity
-// to remove lingering dynamic styles intended for the user's visual focus.
-setTimeout(clearPairwiseStyleClasses);
