@@ -106,7 +106,6 @@ let getItemSectionNumber = function(id) {
   return id.substr(1,1);
 };
 
-
 let inputIsCriteria = function(input) {
   return input.id.indexOf('criteria') === 0;
 }
@@ -431,7 +430,7 @@ let runAHP = function(event) {
     const rowIndex = getPairwiseInputRow(id);
 
     if(!criteriaItemRank[groupKey]) {
-      // group does not exits, so create it
+      // group does not exist, so create it
       criteriaItemRank[groupKey] = [];
     }
     if(!criteriaItemRank[groupKey][rowIndex]) {
@@ -481,29 +480,45 @@ let runAHP = function(event) {
 
   let decision = window.runCalculation(items, criteria, criteriaItemRank, criteriaRank);
 
-	new window.chartist.Bar('#criteria', {
-	  labels: decision.criteria.labels,
-	  series: decision.criteria.series
-	}, {
-	  stackBars: true,
-	  horizontalBars: true,
-	  reverseData: true,
-	  axisY: {
-	    offset: 100
-	  }
-	});
+  new window.chartist.Bar('#criteria', {
+    labels: decision.criteria.labels,
+    series: decision.criteria.series
+  }, {
+    stackBars: true,
+    horizontalBars: true,
+    reverseData: true,
+    axisY: {
+      offset: 100
+    }
+  });
 
-	new window.chartist.Bar('#rankings', {
-	  labels: decision.rankings.labels,
-	  series: decision.rankings.series,
-	}, {
-	  stackBars: true,
-	  horizontalBars: true,
-	  reverseData: true,
-	  axisY: {
-	    offset: 100
-	  }
-	});
+  new window.chartist.Bar('#rankings', {
+    labels: decision.rankings.labels,
+    series: decision.rankings.series,
+  }, {
+    stackBars: true,
+    horizontalBars: true,
+    reverseData: true,
+    axisY: {
+      offset: 100
+    }
+  });
+
+  // === Update the Consistency Ratio (CR) display ===
+  if(decision.consistency && typeof decision.consistency.criteria !== 'undefined') {
+    const criteriaCRElem = document.getElementById('criteriaCR');
+    const crValue = decision.consistency.criteria;
+    criteriaCRElem.textContent = `Criteria CR: ${crValue.toFixed(3)}`;
+    
+    // Set background color based on threshold (0.10)
+    if (crValue < 0.10) {
+      criteriaCRElem.style.backgroundColor = 'lightgreen';
+    } else {
+      criteriaCRElem.style.backgroundColor = 'red';
+      criteriaCRElem.title = "Check the score for inconsistency";
+    }
+  }
+  // === End CR update ===
 
   event.preventDefault();
 
