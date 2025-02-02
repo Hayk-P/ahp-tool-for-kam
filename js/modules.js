@@ -84,7 +84,7 @@ const inputsToAhpResults = function(myItems, myCriteria, myCriteriaItemRank, myC
       series: unzip(alternativesPriorityMatrix),
     },
     consistency: {
-      criteria: crCriteria
+      criteria: 0.123  // forced test value for debugging
       // (You can later add alternatives: crAlternatives if needed.)
     }
   }
