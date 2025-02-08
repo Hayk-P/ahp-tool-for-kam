@@ -511,6 +511,12 @@ let runAHP = function(event) {
   // Random Index (RI) values for different matrix sizes
   const RI = [0.00, 0.00, 0.58, 0.90, 1.12, 1.24, 1.32, 1.41, 1.45, 1.49];
 
+  // Ensure valid matrix size
+  if (n < 2 || !Array.isArray(matrix) || matrix.length !== n) {
+    console.error("Invalid matrix size for CR calculation.");
+    return NaN;
+  }
+
   // Calculate the sum of each column
   let columnSums = new Array(n).fill(0);
   for (let i = 0; i < n; i++) {
@@ -546,7 +552,15 @@ let runAHP = function(event) {
   // Calculate the Consistency Index (CI)
   let CI = (lambdaMax - n) / (n - 1);
 
+  // Handle division by zero or invalid RI index
+  if (isNaN(CI) || CI === Infinity || RI[n - 1] === 0) {
+    console.error("Consistency Index calculation error.");
+    return NaN;
+  }
+
   // Calculate the Consistency Ratio (CR)
   let CR = CI / RI[n - 1];
-  return CR;
+
+  return isNaN(CR) ? NaN : CR;
 }
+
