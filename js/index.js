@@ -506,31 +506,47 @@ let runAHP = function(event) {
     }
   });
 
-    // === Update the Consistency Ratio (CR) display ===
-  if(decision.consistency && typeof decision.consistency.criteria !== 'undefined') {
-    const criteriaCRElem = document.getElementById('criteriaCR');
-    const crValue = decision.consistency.criteria;
-    criteriaCRElem.textContent = `Criteria CR: ${crValue.toFixed(3)}`;
-    
-    // Set background color based on threshold (0.10)
-    if (crValue < 0.10) {
-      criteriaCRElem.style.backgroundColor = 'lightgreen';
-    } else {
-      criteriaCRElem.style.backgroundColor = 'red';
-      criteriaCRElem.title = "Check the score for inconsistency";
+  // Function to calculate CR
+  function calculateConsistencyRatio(matrix, n) {
+  // Random Index (RI) values for different matrix sizes
+  const RI = [0.00, 0.00, 0.58, 0.90, 1.12, 1.24, 1.32, 1.41, 1.45, 1.49];
+
+  // Calculate the sum of each column
+  let columnSums = new Array(n).fill(0);
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < n; j++) {
+      columnSums[i] += matrix[j][i];
     }
   }
-  // === End CR update ===
 
-  // TEMPORARY: Force update the CR placeholder with a test value.
-  const testCRElem = document.getElementById('criteriaCR');
-  if (testCRElem) {
-    testCRElem.textContent = "Test CR: 0.123";
-    testCRElem.style.backgroundColor = 'lightgreen';
-    console.log("Forced test CR update in index.js");
-  } else {
-    console.log("Element with id 'criteriaCR' not found!");
+  // Normalize the matrix
+  let normalizedMatrix = [];
+  for (let i = 0; i < n; i++) {
+    normalizedMatrix[i] = [];
+    for (let j = 0; j < n; j++) {
+      normalizedMatrix[i][j] = matrix[i][j] / columnSums[j];
+    }
   }
 
-  event.preventDefault();
-  return false;
+  // Calculate the average of each row
+  let rowAverages = new Array(n).fill(0);
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < n; j++) {
+      rowAverages[i] += normalizedMatrix[i][j];
+    }
+    rowAverages[i] /= n;
+  }
+
+  // Calculate the maximum eigenvalue (λmax)
+  let lambdaMax = 0;
+  for (let i = 0; i < n; i++) {
+    lambdaMax += columnSums[i] * rowAverages[i];
+  }
+
+  // Calculate the Consistency Index (CI)
+  let CI = (lambdaMax - n) / (n - 1);
+
+  // Calculate the Consistency Ratio (CR)
+  let CR = CI / RI[n - 1];
+  return CR;
+}
