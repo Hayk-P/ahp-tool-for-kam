@@ -506,8 +506,27 @@ let runAHP = function(event) {
     }
   });
 
-  // Function to calculate CR
-  function calculateConsistencyRatio(matrix, n) {
+  // Calculate CR and update UI
+let CR = calculateConsistencyRatio(criteriaRank, criteriaTotalCheck);
+updateCRDisplay(CR);
+
+// Function to update the CR value in the UI
+function updateCRDisplay(CR) {
+  const crValueElement = document.getElementById('cr_value');
+
+  // Handle NaN or undefined CR values
+  if (isNaN(CR) || CR === undefined) {
+    crValueElement.textContent = "CR: Calculation Error";
+    crValueElement.style.color = 'gray';
+    return;
+  }
+
+  crValueElement.textContent = `CR: ${CR.toFixed(3)}`;
+  crValueElement.style.color = (CR <= 0.10) ? 'green' : 'red';
+}
+
+// Function to calculate CR
+function calculateConsistencyRatio(matrix, n) {
   // Random Index (RI) values for different matrix sizes
   const RI = [0.00, 0.00, 0.58, 0.90, 1.12, 1.24, 1.32, 1.41, 1.45, 1.49];
 
@@ -563,4 +582,3 @@ let runAHP = function(event) {
 
   return isNaN(CR) ? NaN : CR;
 }
-
